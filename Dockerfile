@@ -1,9 +1,8 @@
-FROM alpine:3.8
+FROM alpine:latest
 
-ARG OVERLAY_VERSION="v1.21.7.0"
+ARG OVERLAY_VERSION="v2.0.0.1"
 ARG OVERLAY_ARCH="amd64"
-ENV INVOICENINJA_VERSION 4.5.17
-
+ENV INVOICENINJA_VERSION 5.0.12
 
 RUN \
     apk add --no-cache \
@@ -76,8 +75,15 @@ RUN \
 	useradd -u 911 -U -d /app -s /bin/false abc && \
 	usermod -G users abc
 
+ENV APP_KEY=SomeRandomStringSomeRandomString
+ENV APP_URL=https://www.ninja.test
 
-COPY root/ /
+ENV DB_HOST=localhost
+ENV DB_DATABASE=invoiceninja
+ENV DB_USERNAME=ninja
+ENV DB_PASSWORD=ninjapasswd
+
+#COPY root/ /
 
 #VOLUME ["/app/storage","/app/public/logo"]
 EXPOSE 80
