@@ -76,6 +76,13 @@ RUN \
 	useradd -u 911 -U -d /app -s /bin/false abc && \
 	usermod -G users abc
 
+ENV APP_KEY=SomeRandomStringSomeRandomString
+ENV APP_URL=https://www.ninja.test
+
+ENV DB_HOST=localhost
+ENV DB_DATABASE=invoiceninja
+ENV DB_USERNAME=ninja
+ENV DB_PASSWORD=ninjapasswd
 
 COPY root/ /
 
