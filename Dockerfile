@@ -43,6 +43,8 @@ RUN \
     rm /etc/nginx/conf.d/default.conf && \
     mkdir -p /run/nginx && \
     mkdir -p /var/tmp/nginx
+    #https://stackoverflow.com/questions/43560321/enable-exif-support-when-running-wordpress-docker-container
+    docker-php-ext-install exif
 
 
 #Get Invoice Ninja
