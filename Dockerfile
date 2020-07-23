@@ -87,7 +87,7 @@ ENV DB_DATABASE=invoiceninja
 ENV DB_USERNAME=ninja
 ENV DB_PASSWORD=ninjapasswd
 
-#COPY root/ /
+COPY root/ /
 
 #VOLUME ["/app/storage","/app/public/logo"]
 EXPOSE 80
