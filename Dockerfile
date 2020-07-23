@@ -21,6 +21,7 @@ RUN \
 	php \
 	php-fpm \
 	php-fileinfo \
+	php-exif \
 	php-json \
 	php-mbstring \
 	php-openssl \
@@ -44,8 +45,8 @@ RUN \
     mkdir -p /run/nginx && \
     mkdir -p /var/tmp/nginx
     #https://stackoverflow.com/questions/43560321/enable-exif-support-when-running-wordpress-docker-container
-    docker-php-ext-install exif
-    docker-php-ext-enable exif 
+    #docker-php-ext-install exif
+    #docker-php-ext-enable exif 
 
 
 #Get Invoice Ninja
