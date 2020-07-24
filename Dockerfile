@@ -1,7 +1,7 @@
-ARG PHP_IMAGE_TAG=7.2-fpm-stretch
+ARG PHP_IMAGE_TAG=7.3-fpm-stretch
 FROM php:${PHP_IMAGE_TAG}
 
-LABEL maintainer="Anojh Thayaparan <athayapa@sfu.ca>"
+LABEL maintainer="An0nym00z"
 
 #####
 # SYSTEM REQUIREMENT
@@ -54,7 +54,7 @@ RUN { \
 # DOWNLOAD AND INSTALL INVOICE NINJA
 #####
 
-ENV INVOICENINJA_VERSION 4.5.19
+ENV INVOICENINJA_VERSION 5.0.12
 
 RUN curl -o ninja.zip -SL https://download.invoiceninja.com/ninja-v${INVOICENINJA_VERSION}.zip \
     && unzip -q ninja.zip -d /var/www/ \
