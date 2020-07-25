@@ -21,7 +21,7 @@ RUN curl -o /tmp/ninja.tar.gz -LJ0 https://github.com/invoiceninja/invoiceninja/
     && rm -rf /var/www/app/docs /var/www/app/tests
 
 # Install nodejs packages
-FROM node:12-alpine as frontend
+FROM node:current-alpine as frontend
 
 COPY --from=base /var/www/app /var/www/app
 WORKDIR /var/www/app/
@@ -33,7 +33,7 @@ FROM php:${PHP_VERSION}-fpm-alpine
 ARG INVOICENINJA_VERSION
 ENV INVOICENINJA_VERSION=$INVOICENINJA_VERSION
 
-LABEL maintainer="Samuel Laulhau <sam@lalop.co>, Holger Lösken <holger.loesken@codedge.de>"
+LABEL maintainer="ShobuPrime"
 
 WORKDIR /var/www/app
 
