@@ -24,12 +24,19 @@ RUN curl -o /tmp/ninja.tar.gz -LJ0 https://github.com/invoiceninja/invoiceninja/
 FROM node:current-alpine as frontend
 
 COPY --from=base /var/www/app /var/www/app
-WORKDIR /var/www/app/
+#WORKDIR /var/www/app
 
-RUN apk add --update nodejs
-RUN apk add --update nodejs npm
-RUN apk add --update npm
-RUN apk add --update nodejs nodejs-npm
+# https://buddy.works/guides/how-dockerize-node-application
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+
+#RUN apk update && apk add nodejs
+#RUN apk update && apk add --update nodejs
+#RUN apk update && apk add --update nodejs npm
+#RUN apk update && apk add --update npm
+#RUN apk update && apk add --update nodejs nodejs-npm
 
 # Prepare php image
 FROM php:${PHP_VERSION}-fpm-alpine
