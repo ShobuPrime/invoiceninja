@@ -74,7 +74,7 @@ ENV INVOICENINJA_USER=invoiceninja
 RUN addgroup -S "$INVOICENINJA_USER" && \
     adduser \
     --disabled-password \
-    --password "temp" \
+    #--password "temp" \
     --gecos "" \
     --home "$(pwd)" \
     --ingroup "$INVOICENINJA_USER" \ 
