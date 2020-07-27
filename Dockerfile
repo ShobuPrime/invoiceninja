@@ -73,7 +73,7 @@ ENV INVOICENINJA_USER=invoiceninja
 
 RUN addgroup -S "$INVOICENINJA_USER" && \
     adduser \
-    #--disabled-password \
+    --disabled-password \
     --password "temp" \
     --gecos "" \
     --home "$(pwd)" \
@@ -87,8 +87,8 @@ RUN addgroup -S "$INVOICENINJA_USER" && \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
     composer global require hirak/prestissimo;
     
-RUN apk add --no-cache su-exec
-RUN set -ex && apk --no-cache add sudo
+#RUN apk add --no-cache su-exec
+#RUN set -ex && apk --no-cache add sudo
 
 USER $INVOICENINJA_USER
 
