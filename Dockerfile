@@ -82,9 +82,11 @@ RUN addgroup -S "$INVOICENINJA_USER" && \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
     composer global require hirak/prestissimo;
+    
+RUN apk add --no-cache su-exec
+RUN set -ex && apk --no-cache add sudo
 
-#USER $INVOICENINJA_USER
-USER root
+USER $INVOICENINJA_USER
 
 RUN composer install --no-dev --no-suggest --no-progress
 
