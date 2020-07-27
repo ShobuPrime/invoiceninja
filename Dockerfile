@@ -28,7 +28,7 @@ COPY --from=base /var/www/app /var/www/app
 
 # https://buddy.works/guides/how-dockerize-node-application
 WORKDIR /app
-COPY package.json /app
+#COPY package.json /app
 RUN npm install
 COPY . /app
 
