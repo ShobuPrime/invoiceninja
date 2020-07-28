@@ -1,8 +1,8 @@
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=7.4
 
 # Get Invoice Ninja
 FROM alpine:latest as base
-ARG INVOICENINJA_VERSION=5.0.12
+ARG INVOICENINJA_VERSION=5.0.9
 
 RUN set -eux; \
     apk add --no-cache \
