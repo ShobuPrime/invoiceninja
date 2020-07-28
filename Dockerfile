@@ -51,6 +51,7 @@ COPY --from=frontend /var/www/app /var/www/app
 COPY entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
+RUN apk update
 RUN set -eux; \
     apk add --no-cache \
     freetype-dev \
