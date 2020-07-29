@@ -27,8 +27,6 @@ FROM node:current-alpine as frontend
 COPY --from=base /var/www/app /var/www/app
 WORKDIR /var/www/app
 
-RUN npm install
-
 # Prepare php image
 FROM php:${PHP_VERSION}-fpm-alpine
 ARG INVOICENINJA_VERSION
