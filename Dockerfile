@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.4.8
+ARG PHP_VERSION=7.3.19
 
 # Get Invoice Ninja
 FROM alpine:latest as base
