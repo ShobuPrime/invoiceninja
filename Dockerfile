@@ -2,7 +2,7 @@ ARG PHP_VERSION=7.4.8
 
 # Get Invoice Ninja
 FROM alpine:latest as base
-ARG INVOICENINJA_VERSION=5.0.13
+ARG INVOICENINJA_VERSION=4.5.19
 
 RUN set -eux; \
     apk update \
@@ -27,8 +27,6 @@ FROM node:current-alpine as frontend
 COPY --from=base /var/www/app /var/www/app
 WORKDIR /var/www/app
 
-RUN npm install
-
 # Prepare php image
 FROM php:${PHP_VERSION}-fpm-alpine
 ARG INVOICENINJA_VERSION
@@ -41,34 +39,6 @@ WORKDIR /var/www/app
 COPY --from=frontend /var/www/app /var/www/app
 COPY entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-
-#RUN set -eux; \
-#    apk add --no-cache \
-#    freetype-dev \
-#    gmp-dev \
-#    libjpeg-turbo-dev \
-#    libpng-dev \
-#    libzip-dev; \
-#    # While initially copying the following line from official Dockerfile, this worked with PHP7.3. It fails with 7.4
-#    # The following issue mentions it's safe to disable: https://github.com/laradock/laradock/issues/2407
-#    # https://github.com/laradock/laradock/issues/2414
-#    # docker-php-ext-configure zip --with-libzip; \
-#    # Just like the command above, this step also fails while trying to upgrade from 7.3 to 7.4 in this image
-#    # Solution was found here: https://github.com/docker-library/php/issues/912#issuecomment-559918036
-#    # docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/; \
-#    docker-php-ext-configure gd --with-freetype --with-jpeg \
-#    # docker-php-ext-install -j$(nproc) \
-#    docker-php-ext-install \
-#        bcmath \
-#        exif \
-#        gd \
-#        gmp \
-#        mbstring \
-#        mysqli \
-#        opcache \
-#        pdo \
-#        pdo_mysql \
-#        zip
         
 RUN set -eux; \
     apk add --no-cache \
