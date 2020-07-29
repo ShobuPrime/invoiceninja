@@ -166,7 +166,7 @@ RUN yarn add puppeteer@1.19.0
 
 # Started a conversation on InvoiceNinja forums to sort out the PDF errors
 # https://forum.invoiceninja.com/t/fresh-v5-docker-install-500-server-error-and-production-info-db-fails/4394/4
-RUN echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
+#RUN echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf
 
 USER $INVOICENINJA_USER
 
