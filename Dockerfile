@@ -22,7 +22,7 @@ RUN curl -o /tmp/ninja.tar.gz -LJ0 https://github.com/invoiceninja/invoiceninja/
     && cp -R /var/www/app/public /var/www/app/docker-backup-public  \
     && mkdir -p /var/www/app/public/logo /var/www/app/storage \
     && cp /var/www/app/.env.example /var/www/app/.env \
-    && cp /var/www/app/.env.dusk.example /var/www/app/.env.dusk.local \
+    && chmod -R 755 /var/www/app/storage  \
     && rm -rf /var/www/app/docs /var/www/app/tests
 
 # Install nodejs packages
