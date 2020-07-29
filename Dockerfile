@@ -10,6 +10,10 @@ RUN set -eux; \
     curl \
     libarchive-tools; \
     mkdir -p /var/www/app
+    
+RUN cd /usr/share \
+    && curl  -L https://github.com/Overbryd/docker-phantomjs-alpine/releases/download/2.11/phantomjs-alpine-x86_64.tar.bz2 | tar xj \
+    && ln -s /usr/share/phantomjs/phantomjs /usr/local/bin/phantomjs
 
 RUN curl -o /tmp/ninja.tar.gz -LJ0 https://github.com/invoiceninja/invoiceninja/tarball/v$INVOICENINJA_VERSION \
     && bsdtar --strip-components=1 -C /var/www/app -xf /tmp/ninja.tar.gz \
@@ -39,7 +43,33 @@ WORKDIR /var/www/app
 COPY --from=frontend /var/www/app /var/www/app
 COPY entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-        
+
+
+#####
+# SYSTEM REQUIREMENT
+#####
+ENV PHANTOMJS phantomjs-2.1.1-linux-x86_64
+
+# set recommended PHP.ini settings
+# see https://secure.php.net/manual/en/opcache.installation.php
+RUN { \
+		echo 'opcache.memory_consumption=128'; \
+		echo 'opcache.interned_strings_buffer=8'; \
+		echo 'opcache.max_accelerated_files=4000'; \
+		echo 'opcache.revalidate_freq=60'; \
+		echo 'opcache.fast_shutdown=1'; \
+		echo 'opcache.enable_cli=1'; \
+} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+ENV PHANTOMJS_BIN_PATH /usr/local/bin/phantomjs
+
+RUN apk update \
+    && apk add --no-cache git \
+    coreutils \
+    chrpath \
+    fontconfig \
+    libpng-dev
+
 RUN set -eux; \
     apk add --no-cache \
     freetype-dev \
