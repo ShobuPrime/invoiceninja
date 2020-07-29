@@ -127,8 +127,8 @@ RUN apk add --no-cache \
     nodejs-npm;
 
 # InvoiceNinja Self-Host troubleshooting mentions to try this: https://invoiceninja.github.io/selfhost.html#trouble-shooting
-ENV NODE_PATH=/usr/bin
-ENV NPM_PATH=/usr/bin
+#ENV NODE_PATH=/usr/bin
+#ENV NPM_PATH=/usr/bin
 
 # "Test PDF" option is failing.
 # Log used to mention "Error: Cannot find module 'puppeteer'"
