@@ -1,92 +1,95 @@
-version: '3.7'
-
-services:
-  server:
-    image: caddy:alpine
-    restart: always
-    environment: 
-      - APP_URL=https://localhost
-    volumes:
-      # Vhost configuration
-      - ./config/caddy/Caddyfile:/etc/caddy/Caddyfile
-
-      # Configure your mounted directories, make sure the folder 'public' and 'storage'
-      # exist, before mounting them
-      -  public:/var/www/app/public
-      -  storage:/var/www/app/storage
-      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/app/public:/var/www/app/public:rw,delegated
-      # - ./docker/app/storage:/var/www/app/storage:rw,delegated
-    depends_on:
-      - app
-    # Run webserver nginx on port 80
-    # Feel free to modify depending what port is already occupied
-    ports: 
-      - "80:80"
-      - "443:443"
-    networks:
-      - invoiceninja
-
-  app:
-    image: invoiceninja/invoiceninja:5
-    restart: always
-    environment: 
-      - APP_URL=https://localhost
-      - APP_KEY=<INSERT THE GENERATED APPLICATION KEY HERE>
-      - MULTI_DB_ENABLED=false
-      - DB_HOST1=db
-    volumes:
-      # Configure your mounted directories, make sure the folder 'public' and 'storage'
-      # exist, before mounting them
-      -  public:/var/www/app/public
-      -  storage:/var/www/app/storage
-      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/app/public:/var/www/app/public:rw,delegated
-      # - ./docker/app/storage:/var/www/app/storage:rw,delegated
-    depends_on:
-      - db
-    networks: 
-      - invoiceninja  
-
-  db:
-    image: mysql:5
-    restart: always
-    environment: 
-      - MYSQL_ROOT_PASSWORD=ninjaAdm1nPassword
-      - MYSQL_USER=ninja
-      - MYSQL_PASSWORD=ninja
-      - MYSQL_DATABASE=db-ninja-01
-    volumes:
-      - mysql-data:/var/lib/mysql:rw
-      # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/mysql/data:/var/lib/mysql:rw,delegated
-    networks:
-      - invoiceninja
-
- 
-  # cron:
-  #   image: invoiceninja/invoiceninja
-  #   volumes:
-  #     -  storage:/var/www/app/storage
-  #     -  logo:/var/www/app/public/logo
-  #     -  public:/var/www/app/public
-  #   entrypoint: |
-  #     bash -c 'bash -s <<EOF
-  #     trap "break;exit" SIGHUP SIGINT SIGTERM
-  #     sleep 300s
-  #     while /bin/true; do
-  #       ./artisan ninja:send-invoices
-  #       ./artisan ninja:send-reminders
-  #       sleep 1d
-  #     done
-  #     EOF'
-  #   networks:
-  #     - invoiceninja
+version: "2"
 
 volumes:
-  mysql-data:
-  public:
+  db:
   storage:
+  logo:
+  public:
 
-networks:
-  invoiceninja:
+# uncomment if you want to use external network (example network: "web")
+#networks:
+#  web:
+#    external: true
+
+services:
+  db:
+    image: mysql:8
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=invoiceninja
+      - MYSQL_USER=ninja
+      - MYSQL_PASSWORD=ninja
+      - MYSQL_ROOT_PASSWORD=ninja
+    networks:
+      - default
+
+  app:
+    image: shobuprime/invoiceninja:latest
+    #image: shobuprime/invoiceninja:alpine-4
+    restart: always
+    depends_on:
+      - db 
+    volumes:
+      - storage:/var/www/app/storage
+      - logo:/var/www/app/public/logo
+      - public:/var/www/app/public
+    environment:
+      - APP_ENV=production
+      - INVOICENINJA_USER=invoiceninja
+      - LOG=errorlog
+      - DB_DATABASE=invoiceninja
+      - DB_USERNAME=ninja
+      - DB_PASSWORD=ninja
+      - DB_HOST=db
+      - DB_STRICT=false
+      - DB_TYPE=mysql
+      - APP_CIPHER=AES-256-CBC
+      - APP_KEY=SomeRandom32bitstring
+      - APP_URL=https://localhost
+      - APP_DEBUG=0
+    networks:
+      - default
+
+  web:
+    image: nginx:1
+    volumes:
+      - storage:/var/www/app/storage
+      - logo:/var/www/app/public/logo
+      - public:/var/www/app/public
+      # Make sure to find appropriate folders and files for nginx
+      #- nginx.conf:/etc/nginx/nginx.conf:ro
+      #- nginx:/var/log/nginx/
+      #- fullchain.pem:/etc/nginx/ssl/fullchain.pem:ro
+      #- privkey.pem:/etc/nginx/ssl/privkey.pem:ro
+      #- dhparam.pem:/etc/nginx/ssl/dhparam.pem:ro
+    expose: # Expose ports without publishing them to the host machine - they'll only be accessible to linked services.
+      - "80"
+      - "443"
+    depends_on:
+      - app
+    ports: # Delete if you want to use reverse proxy
+      - 443:443
+    networks:
+#      - web # uncomment if you want to use external network (reverse proxy for example)
+      - default
+
+#  cron:
+#    image: invoiceninja/invoiceninja
+#    volumes:
+#      - storage:/var/www/app/storage
+#      - logo:/var/www/app/public/logo
+#      - public:/var/www/app/public
+#    entrypoint: |
+#      bash -c 'bash -s <<EOF
+#      trap "break;exit" SIGHUP SIGINT SIGTERM
+#      sleep 300s
+#      while /bin/true; do
+#        ./artisan ninja:send-invoices
+#        ./artisan ninja:send-reminders
+#        sleep 1d
+#      done
+#      EOF'
+#    networks:
+#      - default
