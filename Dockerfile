@@ -31,6 +31,12 @@ FROM node:current-alpine as frontend
 COPY --from=base /var/www/app /var/www/app
 WORKDIR /var/www/app
 
+# Install Nginx
+FROM nginx:alpine as webserver
+
+# Install MySQL
+# FROM mysql:5 as database
+
 # Prepare php image
 FROM php:${PHP_VERSION}-fpm-alpine
 ARG INVOICENINJA_VERSION
@@ -43,7 +49,6 @@ WORKDIR /var/www/app
 COPY --from=frontend /var/www/app /var/www/app
 COPY entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
-
 
 #####
 # SYSTEM REQUIREMENT
@@ -173,4 +178,4 @@ ENV APP_ENV production
 ENV LOG errorlog
 
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["php-fpm"]
+CMD ["php-fpm", "nginx", "-g", "daemon off;"]
