@@ -177,5 +177,7 @@ RUN composer install --no-dev --no-suggest --no-progress
 ENV APP_ENV production
 ENV LOG errorlog
 
+EXPOSE 80
+
 ENTRYPOINT ["docker-entrypoint"]
 CMD ["php-fpm", "nginx", "-g", "daemon off;"]
