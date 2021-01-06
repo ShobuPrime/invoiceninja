@@ -2,7 +2,7 @@ ARG PHP_VERSION=7.4.8
 
 # Get Invoice Ninja
 FROM alpine:latest as base
-ARG INVOICENINJA_VERSION=5.0.13
+ARG INVOICENINJA_VERSION=5.0.43
 
 RUN set -eux; \
     apk update \
