@@ -1,8 +1,8 @@
-ARG PHP_VERSION=7.4.8
+ARG PHP_VERSION=8.0
 
 # Get Invoice Ninja
 FROM alpine:latest as base
-ARG INVOICENINJA_VERSION=5.0.13
+ARG INVOICENINJA_VERSION=5.0.43
 
 RUN set -eux; \
     apk update \
@@ -131,7 +131,7 @@ RUN apk add --no-cache \
 # "Test PDF" option is failing.
 # Log used to mention "Error: Cannot find module 'puppeteer'"
 # Install puppeteer so it's available in the container.
-RUN npm i puppeteer
+#RUN npm i puppeteer
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
     #&& groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
@@ -143,22 +143,22 @@ RUN npm i puppeteer
 # Attempting fixes found in: https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker
 #-----------------
 # Installs latest Chromium (77) package.
-RUN apk add --no-cache \
-        chromium \
-        nss \
-        freetype \
-        freetype-dev \
-        harfbuzz \
-        ca-certificates \
-        ttf-freefont \
-        yarn
+#RUN apk add --no-cache \
+#        chromium \
+#        nss \
+#        freetype \
+#        freetype-dev \
+#        harfbuzz \
+#        ca-certificates \
+#        ttf-freefont \
+#        yarn
      
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+#ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+#    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
     
 # Puppeteer v1.19.0 works with Chromium 77.
-RUN yarn add puppeteer@1.19.0
+#RUN yarn add puppeteer@1.19.0
 
 #RUN apk install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 
