@@ -116,7 +116,7 @@ RUN addgroup -S "$INVOICENINJA_USER" && \
 # Install Composer
 #RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
 #    composer global require hirak/prestissimo;
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer;
     
 # Official docker image does not seem to have Node.js running properly in the container
 # Brute force it!
