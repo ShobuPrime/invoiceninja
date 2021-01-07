@@ -101,10 +101,21 @@ COPY ./config/php/php-cli.ini /usr/local/etc/php/php-cli.ini
 ## Separate user
 ENV INVOICENINJA_USER=invoiceninja
 
-RUN addgroup -S "$INVOICENINJA_USER" && \
-    adduser \
+#RUN addgroup -S "$INVOICENINJA_USER" && \
+#    adduser \
+#    --disabled-password \
+#    #--password "temp" \
+#    --gecos "" \
+#    --home "$(pwd)" \
+#    --ingroup "$INVOICENINJA_USER" \ 
+#    --no-create-home \
+#    "$INVOICENINJA_USER"; \
+#    addgroup "$INVOICENINJA_USER" www-data; \
+#    chown -R "$INVOICENINJA_USER":"$INVOICENINJA_USER" /var/www/app
+    
+RUN addgroup --gid=1500 -S "$INVOICENINJA_USER" && \
+    adduser --uid=1500 \
     --disabled-password \
-    #--password "temp" \
     --gecos "" \
     --home "$(pwd)" \
     --ingroup "$INVOICENINJA_USER" \ 
