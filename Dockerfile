@@ -101,10 +101,9 @@ COPY ./config/php/php-cli.ini /usr/local/etc/php/php-cli.ini
 ## Separate user
 ENV INVOICENINJA_USER=invoiceninja
 
-RUN addgroup -S "$INVOICENINJA_USER" && \
-    adduser \
+RUN addgroup --gid=1500 -S "$INVOICENINJA_USER" && \
+    adduser --uid=1500 \
     --disabled-password \
-    #--password "temp" \
     --gecos "" \
     --home "$(pwd)" \
     --ingroup "$INVOICENINJA_USER" \ 
@@ -114,8 +113,7 @@ RUN addgroup -S "$INVOICENINJA_USER" && \
     chown -R "$INVOICENINJA_USER":"$INVOICENINJA_USER" /var/www/app
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer; \
-    composer global require hirak/prestissimo;
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer;
     
 # Official docker image does not seem to have Node.js running properly in the container
 # Brute force it!
